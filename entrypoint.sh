@@ -28,7 +28,10 @@ echo -e "${VSFTPD_FTP_USER}\n${VSFTPD_FTP_PASS}" > /etc/vsftpd/virtual_users.txt
     log " Updated /etc/vsftpd/virtual_users.txt"
 
 /usr/bin/db_load -T -t hash -f /etc/vsftpd/virtual_users.txt /etc/vsftpd/virtual_users.db && \
-    log " Updated vsftpd database"
+    log " Updated vsftpd user database"
+
+chmod 600 /etc/vsftpd/virtual_users.db && \
+    log " Set permissions on vsftpd user database"
 
 # Get log file path
 export VSFTPD_LOG_FILE=$(awk -F '=' '/^vsftpd_log_file/ {print $2}' /etc/vsftpd/vsftpd.conf)
@@ -37,7 +40,7 @@ export VSFTPD_LOG_FILE=$(awk -F '=' '/^vsftpd_log_file/ {print $2}' /etc/vsftpd/
 chown -R ftp:ftp /home/vsftpd/ && \
     log " Fixed permissions for newly created user: ${VSFTPD_FTP_USER}"
 
-# stdout server info:
+# Print out basic info on stdout
 cat <<EOB
     USER SETTINGS
 	---------------
@@ -50,6 +53,9 @@ EOB
 
 # Print all other vsftpd settings
 egrep -v '^#|^$' /etc/vsftpd/vsftpd.conf | prepend "	· "
+
+# Touch basic file in the root for anonymous user
+echo "Welcome to " /var/lib/ftp/welcome.txt
 
 # Run vsftpd:
 log "Starting VSFTPD daemon with:"
