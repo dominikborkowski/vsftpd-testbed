@@ -1,0 +1,33 @@
+version: '3'
+services:
+
+##############################################################################
+# start containers
+
+  vsftpd:
+    container_name: 'vsftpd'
+    build:
+      context: ./
+    ports:
+      - "127.0.0.1:20-21:20-21"
+      - "127.0.0.1:21000-21099:21000-21099"
+    restart: unless-stopped
+    networks:
+      vsftpd-network:
+    environment:
+      VSFTPD_ANONYMOUS_ACCESS: "true"
+      VSFTPD_MIN_PORT: 21000
+      VSFTPD_MAX_PORT: 21099
+      VSFTPD_UPLOADED_FILES_WORLD_READABLE: "true"
+
+# end containers
+##############################################################################
+
+##############################################################################
+# start volumes and networks
+
+networks:
+  vsftpd-network:
+
+# end of volumes and networks
+##############################################################################
