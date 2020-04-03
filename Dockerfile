@@ -15,6 +15,8 @@ ENV \
 
 COPY entrypoint.sh /entrypoint.sh
 COPY vsftpd.conf /etc/vsftpd/vsftpd.conf
+COPY vsftpd-users.csv /vsftpd-users.csv
+
 
 EXPOSE 20-21 21000-21099
 VOLUME /ftp/ftp

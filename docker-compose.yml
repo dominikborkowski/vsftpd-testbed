@@ -22,8 +22,9 @@ services:
       VSFTPD_MAX_PORT: 21099
       VSFTPD_UPLOADED_FILES_WORLD_READABLE: "true"
       VSFTPD_USERS_FILE: "/vsftpd-users.csv"
-    volumes:
-      - ${PWD}/vsftpd-users.csv:/vsftpd-users.csv
+    # Here's how to override built-in users:
+    # volumes:
+    #   - ${PWD}/vsftpd-users.csv:/vsftpd-users.csv
 
 # end containers
 ##############################################################################
