@@ -2,12 +2,10 @@ FROM alpine:3.10
 RUN apk --no-cache add vsftpd db db-utils shadow && \
     sed -i '/^CREATE_MAIL_SPOOL/s/yes/no/' /etc/default/useradd
 
-
+# default settings, can be overwritten via docker-compose
 ENV \
     VSFTPD_ANONYMOUS_ACCESS=true \
     VSFTPD_CHROOT_LOCAL_USER=true \
-    VSFTPD_FTP_USER=admin \
-    VSFTPD_FTP_PASS=random \
     VSFTPD_HIDE_IDS=true \
     VSFTPD_MIN_PORT=21000 \
     VSFTPD_MAX_PORT=21099 \

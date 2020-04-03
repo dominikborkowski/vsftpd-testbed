@@ -60,6 +60,7 @@ egrep -v '^#|^$' /etc/vsftpd/vsftpd.conf | prepend "	· "
 
 # Touch basic file in the root for anonymous user
 echo "Welcome to Cyber Range FTP Server" > /var/lib/ftp/welcome.txt && \
+    chown ftp:ftp /var/lib/ftp/welcome.tx && \
     log "Creating text file with a welcome message"
 
 # Run vsftpd:
