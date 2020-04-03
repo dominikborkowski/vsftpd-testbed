@@ -1,5 +1,7 @@
 FROM alpine:3.10
-RUN apk --no-cache add vsftpd db db-utils
+RUN apk --no-cache add vsftpd db db-utils shadow && \
+    sed -i '/^CREATE_MAIL_SPOOL/s/yes/no/' /etc/default/useradd
+
 
 ENV \
     VSFTPD_ANONYMOUS_ACCESS=true \
@@ -7,7 +9,8 @@ ENV \
     VSFTPD_FTP_PASS=random \
     VSFTPD_MIN_PORT=21000 \
     VSFTPD_MAX_PORT=21099 \
-    VSFTPD_UPLOADED_FILES_WORLD_READABLE=false
+    VSFTPD_UPLOADED_FILES_WORLD_READABLE=false\
+    VSFTPD_USERS_FILE=/vsftpd-users.csv
 
 COPY entrypoint.sh /entrypoint.sh
 COPY container/ /
