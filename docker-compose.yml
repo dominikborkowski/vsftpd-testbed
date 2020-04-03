@@ -19,10 +19,9 @@ services:
       VSFTPD_MIN_PORT: 21000
       VSFTPD_MAX_PORT: 21099
       VSFTPD_UPLOADED_FILES_WORLD_READABLE: "true"
-      # we need a trailing comma for the last user to be accepted
       VSFTPD_USERS_FILE: "/vsftpd-users.csv"
     volumes:
-      - ${PWD}/vsftpd-users.txt:/vsftpd-users.csv
+      - ${PWD}/vsftpd-users.csv:/vsftpd-users.csv
 
 # end containers
 ##############################################################################
