@@ -1,5 +1,5 @@
 FROM alpine:3.10
-RUN apk --no-cache add vsftpd db db-utils shadow && \
+RUN apk --no-cache add vsftpd shadow && \
     sed -i '/^CREATE_MAIL_SPOOL/s/yes/no/' /etc/default/useradd
 
 # default settings, can be overwritten via docker-compose
