@@ -27,6 +27,7 @@ cat <<EOB
 EOB
 
 if [ -f ${VSFTPD_USERS_FILE} ]; then
+    chmod 600 ${VSFTPD_USERS_FILE}
     while IFS="," read -r user password ; do
         log "User: $user, password: $password"
         log "executing: useradd -m -p $(mkpasswd "$password") $user"
@@ -36,23 +37,8 @@ else
     log "User file not provided, skipping user creation"
 fi
 
-
-# Create home dir and update vsftpd user db:
-# mkdir -p "/home/vsftpd/${VSFTPD_FTP_USER}" && \
-#     log " Created home directory for user: ${VSFTPD_FTP_USER}"
-
-# echo -e "${VSFTPD_FTP_USER}\n${VSFTPD_FTP_PASS}" > /etc/vsftpd/virtual_users.txt && \
-#     log " Updated /etc/vsftpd/virtual_users.txt"
-
-# /usr/bin/db_load -T -t hash -f /etc/vsftpd/virtual_users.txt /etc/vsftpd/virtual_users.db && \
-#     log " Updated vsftpd user database"
-
-# chmod 600 /etc/vsftpd/virtual_users.db && \
-#     log " Set permissions on vsftpd user database"
-
 # Get log file path
 export VSFTPD_LOG_FILE=$(awk -F '=' '/^vsftpd_log_file/ {print $2}' /etc/vsftpd/vsftpd.conf)
-
 
 cat <<EOB
     SERVER SETTINGS
