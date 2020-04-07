@@ -2,7 +2,7 @@
 # Start VSFTPD service
 
 # Write nicely formatted log lines
-log() { if [[ "$@" ]]; then echo "[CR VSFTPD $(date +'%T')] $@"; else echo; fi }
+log() { if [[ "$@" ]]; then echo "[CR VSFTPD $(date +'%T')] $@"; else echo; fi; }
 
 # Prepend lines with something
 prepend() { while read line; do echo "${1}${line}"; done; }
@@ -11,28 +11,27 @@ log "Starting setup for VSFTPD: "
 
 # Anonymous access
 if [ "${VSFTPD_ANONYMOUS_ACCESS}" = "true" ]; then
-    sed -i "/^anonymous_enable/s/NO/YES/" /etc/vsftpd/vsftpd.conf && \
-    log " Enabled access for anonymous user"
+    sed -i "/^anonymous_enable/s/NO/YES/" /etc/vsftpd/vsftpd.conf &&
+        log " Enabled access for anonymous user"
 fi
 
 # Chroot local users
 if [ "${VSFTPD_CHROOT_LOCAL_USER}" = "true" ]; then
-    sed -i "/^chroot_local_user/s/NO/YES/" /etc/vsftpd/vsftpd.conf && \
-    log " Confine local users to chroot, they won't be able to see entire filesystem"
+    sed -i "/^chroot_local_user/s/NO/YES/" /etc/vsftpd/vsftpd.conf &&
+        log " Confine local users to chroot, they won't be able to see entire filesystem"
 fi
 
 # Hide user IDs
 if [ "${VSFTPD_HIDE_IDS}" = "true" ]; then
-    sed -i "/^hide_ids/s/NO/YES/" /etc/vsftpd/vsftpd.conf && \
-    log " Enabled hiding user IDs, files will appear owned as ftp:ftp"
+    sed -i "/^hide_ids/s/NO/YES/" /etc/vsftpd/vsftpd.conf &&
+        log " Enabled hiding user IDs, files will appear owned as ftp:ftp"
 fi
 
 # Uploaded files world readable settings
 if [ "${VSFTPD_UPLOADED_FILES_WORLD_READABLE}" = "true" ]; then
-    sed -i "/^local_umask/s/077/022/" /etc/vsftpd/vsftpd.conf && \
-    log " Uploaded files will become world readable"
+    sed -i "/^local_umask/s/077/022/" /etc/vsftpd/vsftpd.conf &&
+        log " Uploaded files will become world readable"
 fi
-
 
 # Add users from a CSV file
 if [ -f ${VSFTPD_USERS_FILE} ]; then
@@ -59,8 +58,8 @@ EOB
 egrep -v '^#|^$' /etc/vsftpd/vsftpd.conf | prepend "	· "
 
 # Touch basic file in the root for anonymous user
-echo "Welcome to Cyber Range FTP Server" > /var/lib/ftp/welcome.txt && \
-    chown ftp:ftp /var/lib/ftp/welcome.txt && \
+echo "Welcome to Cyber Range FTP Server" >/var/lib/ftp/welcome.txt &&
+    chown ftp:ftp /var/lib/ftp/welcome.txt &&
     log "Creating text file with a welcome message"
 
 # Run vsftpd:
