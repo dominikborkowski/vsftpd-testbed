@@ -37,11 +37,22 @@ fi
 if [ -f ${VSFTPD_USERS_FILE} ]; then
     # Protect the file, just in case if a user explores the filesystem
     chmod 600 ${VSFTPD_USERS_FILE}
-    while IFS="," read -r user password ; do
-        log "User: $user, password: $password"
-        log "executing: useradd -m -p $(mkpasswd "$password") $user"
+    # Read users, passwords, and optional content of a flag file
+    while IFS="," read -r user password flag; do
+        log "User: $user, password: $password, flag: $flag"
+        log " Executing: useradd -m -p $(mkpasswd "$password") $user"
         useradd -m -p $(mkpasswd "$password") $user
-    done < ${VSFTPD_USERS_FILE}
+        # Create flag file in given user's home dir
+        if [ ! -z ${flag} ]; then
+            log " Creating ~${user}/flag.txt with following content: ${flag}"
+            flag_file=$(eval "echo ~$user")/flag.txt
+            echo "${flag}" >${flag_file}
+            chown ${user}:${user} ${flag_file}
+            chmod 600 ${flag_file}
+        else
+            log "NO FLAG"
+        fi
+    done <${VSFTPD_USERS_FILE}
 else
     log "User file not provided, skipping user creation"
 fi

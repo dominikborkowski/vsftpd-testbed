@@ -1,5 +1,5 @@
-alice,123456
-bob,123456789
+alice,123456,3144e4b96f7fd15227332e23b8537d89
+bob,123456789,95fbdaa0f180b28b7eed1d5635015b6ddda10355
 carol,qwerty
 chuck,password
 craig,1111111
@@ -23,5 +23,5 @@ sybil,welcome
 trent,654321
 trudy,555555
 victor,7777777
-walter,888888
+walter,888888,4e1243bd22c66e76c2ba9eddc1f91394e57f9f83
 wendy,princess
