@@ -9,8 +9,7 @@ This is a basic Alpine Linux based container running VSFTPD, with a number of pr
 * VSFTPD 3.0.3
 * Local users & passwords configured via plain text input file
 * Setup, user list, server config, and server logs directed to stdout
-* Small size: 8.7MB
-
+* Ability to specify content of `~/flag.txt` for a given user
 
 ## Usage
 
@@ -50,23 +49,32 @@ Environment variables:
 Syntax:
 ```
 username1,password1
-username2,password2
+username2,password2,content_of_optional_flag.txt
 ```
 
 ## Sample output
 
 ```
-vsftpd    | [CR VSFTPD 17:03:04] Starting setup for VSFTPD:
-vsftpd    | [CR VSFTPD 17:03:04]  Enabled access for anonymous user
-vsftpd    | [CR VSFTPD 17:03:04]  Confine local users to chroot, they won't be able to see entire filesystem
-vsftpd    | [CR VSFTPD 17:03:04]  Uploaded files will become world readable
-vsftpd    | [CR VSFTPD 17:03:04] User: alice, password: 123456
-vsftpd    | [CR VSFTPD 17:03:04] executing: useradd -m -p $6$hpk.ynpvTCWSTZEr$2oWC5j8K9jKgQJsFdp9dLQWn3rgG2H5/bzWGVbF7MXcyn9POEKDs92NvY1/WZka6FPqt5vvAMqABF5zfcQtyW0 alice
-vsftpd    | [CR VSFTPD 17:03:04] User: bob, password: 123456789
-vsftpd    | [CR VSFTPD 17:03:04] executing: useradd -m -p $6$FrRwK8jnBtVQnxdf$IQ8GaAtIMlGHNN7GNbHb7MkgonTSlGsJ.VuwHhqKXyVJfAVP/vdMn5IamMiIrZ0AvR1.6.79rdl9KUyUTIMlj1 bob
+Creating network "vsftpd-testbed_vsftpd-network" with the default driver
+Creating vsftpd ... done
+Attaching to vsftpd
+vsftpd    | [CR VSFTPD 13:10:04] Starting setup for VSFTPD:
+vsftpd    | [CR VSFTPD 13:10:04]  Enabled access for anonymous user
+vsftpd    | [CR VSFTPD 13:10:04]  Confine local users to chroot, they won't be able to see entire filesystem
+vsftpd    | [CR VSFTPD 13:10:04]  Uploaded files will become world readable
+vsftpd    | [CR VSFTPD 13:10:04] User: alice, password: 123456, flag: 3144e4b96f7fd15227332e23b8537d89
+vsftpd    | [CR VSFTPD 13:10:04]  Executing: useradd -m -p $6$bAFDKO1H6i0AEWGR$XAbz4AwecbeCLAH.dF7id4jeCvO/4c2SNb0hgf9ACO8BCA1wVBjzjBAv7gorfOFCfcDQQV15NAnb81TjnpM/30 alice
+vsftpd    | [CR VSFTPD 13:10:04]  Creating ~alice/flag.txt with following content: 3144e4b96f7fd15227332e23b8537d89
+vsftpd    | [CR VSFTPD 13:10:04] User: bob, password: 123456789, flag: 95fbdaa0f180b28b7eed1d5635015b6ddda10355
+vsftpd    | [CR VSFTPD 13:10:04]  Executing: useradd -m -p $6$AnFknBia810UMlSD$bFfmOUDVZoCGHJ9r.XnbxUcQnNc5OspyjUQwARk1zlu7QpkLDDOIImRMcZzLR/eMvtECiZ7fiJJcpRMxrC8Sk/ bob
+vsftpd    | [CR VSFTPD 13:10:04]  Creating ~bob/flag.txt with following content: 95fbdaa0f180b28b7eed1d5635015b6ddda10355
+vsftpd    | [CR VSFTPD 13:10:04] User: carol, password: qwerty, flag:
+vsftpd    | [CR VSFTPD 13:10:04]  Executing: useradd -m -p $6$/W1SPJZHaU0V/B.d$HQSyLXSvt4/ojObnYKKKEkhKjbGYqQTowZS4UzDp8pAKwbzULOHMonmnphFiCbX6UxHmKFpGz43vtwPMZu9ez. carol
+vsftpd    | [CR VSFTPD 13:10:04] NO FLAG
 [...]
-vsftpd    | [CR VSFTPD 17:03:05] User: wendy, password: princess
-vsftpd    | [CR VSFTPD 17:03:05] executing: useradd -m -p $6$P3c/4wPCLDFYpPOO$DM8wy24F78YHYRSfROcBzJaAGWMAIxY79H.JEONtCArJxYYbKUXrwWTOeBXG0z7NOH1AbKD3.c9d0qbLPtPxY0 wendy
+vsftpd    | [CR VSFTPD 13:10:05] User: wendy, password: princess, flag:
+vsftpd    | [CR VSFTPD 13:10:05]  Executing: useradd -m -p $6$2ncM9uCCCo//bJNZ$dTlpLjUO3ngolOd8KDYTjYbhr2/eC1RlAY1QM/cPkXIhrWQP2lcgyTbfh1ZOe8GguY0TvKdCKBKHIaChL7Sga/ wendy
+vsftpd    | [CR VSFTPD 13:10:05] NO FLAG
 vsftpd    |     SERVER SETTINGS
 vsftpd    | 	---------------
 vsftpd    | 	· seccomp_sandbox=NO
@@ -78,9 +86,7 @@ vsftpd    | 	· write_enable=YES
 vsftpd    | 	· local_umask=022
 vsftpd    | 	· chroot_local_user=YES
 vsftpd    | 	· allow_writeable_chroot=YES
-vsftpd    | 	· hide_ids=NO
 vsftpd    | 	· text_userdb_names=YES
-vsftpd    | 	· tilde_user_enable=YES
 vsftpd    | 	· dirmessage_enable=YES
 vsftpd    | 	· ftpd_banner=Welcome to Cyber Range FTP server
 vsftpd    | 	· port_enable=YES
@@ -91,7 +97,7 @@ vsftpd    | 	· log_ftp_protocol=YES
 vsftpd    | 	· xferlog_enable=YES
 vsftpd    | 	· xferlog_file=/var/log/vsftpd/vsftpd.log
 vsftpd    | 	· vsftpd_log_file=/proc/1/fd/1
-vsftpd    | chown: /var/lib/ftp/welcome.tx: No such file or directory
-vsftpd    | [CR VSFTPD 17:03:05] Starting VSFTPD daemon with:
-vsftpd    | [CR VSFTPD 17:03:05]  /usr/sbin/vsftpd -opasv_min_port=21000 -opasv_max_port=21099 /etc/vsftpd/vsftpd.conf
+vsftpd    | [CR VSFTPD 13:10:05] Creating text file with a welcome message
+vsftpd    | [CR VSFTPD 13:10:05] Starting VSFTPD daemon with:
+vsftpd    | [CR VSFTPD 13:10:05]  /usr/sbin/vsftpd -opasv_min_port=21000 -opasv_max_port=21099 /etc/vsftpd/vsftpd.conf
 ```
